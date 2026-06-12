@@ -596,6 +596,57 @@
     }
     .foot-links a:hover { color: rgba(249,248,244,0.6); }
 
+    /* ── TEXT WIDGET ── */
+    .text-widget {
+      padding: 64px 48px 72px;
+      border-top: 1px dashed var(--dashed);
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .text-widget-h {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 400;
+      color: var(--charcoal); line-height: 1.2;
+      margin-bottom: 32px; max-width: 560px;
+    }
+    .text-input-row {
+      display: flex; align-items: center;
+      background: var(--white); border-radius: 100px;
+      border: 1px solid var(--border);
+      overflow: hidden; width: 100%; max-width: 460px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    }
+    .t-prefix {
+      padding: 0 16px 0 22px;
+      font-size: 0.95rem; color: var(--muted);
+      border-right: 1px solid var(--border);
+      white-space: nowrap; line-height: 52px;
+    }
+    .t-input {
+      flex: 1; border: none; outline: none;
+      padding: 0 16px; font-size: 0.95rem;
+      background: transparent; color: var(--charcoal);
+      font-family: 'Inter', sans-serif;
+      height: 52px;
+    }
+    .t-input::placeholder { color: rgba(110,100,88,0.45); }
+    .t-btn {
+      background: var(--charcoal); color: var(--white);
+      border: none; padding: 0 26px; height: 52px;
+      font-size: 0.9rem; font-weight: 500; cursor: pointer;
+      border-radius: 0 100px 100px 0;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .t-btn:hover { background: #2c2b28; }
+    .t-consent {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.78rem; color: var(--muted);
+      margin-top: 14px; opacity: 0.75;
+    }
+    @media (max-width: 960px) {
+      .text-widget { padding: 48px 24px 56px; }
+    }
+
     /* ── SCROLL REVEAL ── */
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.in { opacity: 1; transform: none; }
@@ -649,16 +700,11 @@
       <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
       <div class="wb"></div>
     </div>
-    <p class="meet-label">Meet Tyler</p>
-    <button class="btn-talk" id="heroTalkBtn" onclick="startHeroCall()">
-      <!-- mic icon -->
+    <button class="btn-talk" id="heroTalkBtn" onclick="scrollToDemo()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-        <line x1="12" y1="19" x2="12" y2="23"/>
-        <line x1="8" y1="23" x2="16" y2="23"/>
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.86-.86a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
       </svg>
-      Start Talking
+      Call Now
     </button>
   </div>
   <div class="hero-canvas"><canvas id="heroCanvas"></canvas></div>
@@ -671,7 +717,6 @@
       <p class="panel-eye">Call our agent</p>
       <a class="call-number" href="tel:+18326458361">+1 (832) 645-8361</a>
       <p class="call-sub">Available 24/7 · Talk to Tyler now</p>
-    </div>
     </div>
   </div>
 </section>
@@ -980,6 +1025,22 @@
   ───────────────────────────────────────── */
   function scrollToDemo() {
     document.getElementById('demo').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function fmtPhone(el) {
+    let v = el.value.replace(/\D/g,'').slice(0,10);
+    if (v.length >= 7) v = v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6);
+    else if (v.length >= 4) v = v.slice(0,3)+'-'+v.slice(3);
+    el.value = v;
+  }
+
+  function sendTextMe() {
+    const raw = document.getElementById('textPhone').value.replace(/\D/g,'');
+    if (raw.length < 10) { alert('Please enter a valid 10-digit phone number.'); return; }
+    // TODO: wire to your Vapi / SMS endpoint
+    // e.g. fetch('/api/send-sms', { method:'POST', body: JSON.stringify({ to: '+1'+raw }) })
+    alert('Thanks! Tyler will text you shortly.');
+    document.getElementById('textPhone').value = '';
   }
 </script>
 
